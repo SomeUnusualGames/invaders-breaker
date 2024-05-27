@@ -119,6 +119,11 @@ void b_DrawRectangleRec(unsigned int rec, int r, int g, int b, int a)
     DrawRectangleRec(rectangles[rec], (Color){r, g, b, a});
 }
 
+void b_DrawPixel(int x, int y, int r, int g, int b, int a)
+{
+    DrawPixel(x, y, (Color){r, g, b, a});
+}
+
 // random functions, they are definitely better than COBOL's ones
 
 void b_InitRandom()
@@ -160,6 +165,10 @@ void b_RectangleSetX(unsigned int rectangle, int x)
 void b_RectangleSetY(unsigned int rectangle, int y)
 {
     rectangles[rectangle].y = y;
+}
+int b_RectangleGetX(unsigned int rectangle)
+{
+    return rectangles[rectangle].x;
 }
 void b_RectangleSetXY(unsigned int rectangle, int x, int y)
 {
