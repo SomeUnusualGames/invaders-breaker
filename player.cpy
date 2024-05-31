@@ -1,6 +1,6 @@
        INIT-PLAYER.
          CALL "b_CreateRectangle" USING
-           BY VALUE player-x 550 75 10
+           BY VALUE player-x 550 PLAYER-WIDTH 10
            RETURNING player-rect
          END-CALL.
        
@@ -36,4 +36,16 @@
        DRAW-PLAYER.
          CALL "b_DrawRectangleRec" USING
            BY VALUE player-rect 255 255 255 255
-         END-CALL.
+         END-CALL
+         >>IF DEBUG = 1
+         CALL "b_DrawRectangle" USING
+           BY VALUE player-x 550 75 10 120 0 120 255
+         END-CALL
+         CALL "b_DrawRectangle" USING
+           BY VALUE player-x 550 42 10 255 0 0 255
+         END-CALL
+         CALL "b_DrawRectangle" USING
+           BY VALUE player-x 550 34 10 10 10 180 255
+         END-CALL
+         >>END-IF
+         .

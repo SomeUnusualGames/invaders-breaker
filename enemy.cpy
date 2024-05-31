@@ -1,3 +1,5 @@
+      * TODO: Make the enemies move slowly instead of "jumping"
+      * TODO: Collision detection with the ball
        INIT-ENEMY.
          MOVE enemy-first-x TO enemy-x
          MOVE enemy-first-y TO enemy-y
@@ -25,7 +27,7 @@
              IF enemy-check-x GREATER THAN 890 THEN
                ADD 30 TO enemy-first-y
                *>SUBTRACT 30 FROM enemy-first-x
-               COMPUTE current-mov = current-mov - 2 * current-mov
+               COMPUTE current-mov = 0 - current-mov
              ELSE
                ADD current-mov TO enemy-first-x
              END-IF
@@ -36,7 +38,7 @@
              END-CALL
              IF enemy-check-x LESS OR EQUAL TO 20 THEN
                ADD 30 TO enemy-first-y
-               COMPUTE current-mov = current-mov - 2 * current-mov
+               COMPUTE current-mov = 0 - current-mov
              ELSE
                ADD current-mov TO enemy-first-x
              END-IF

@@ -9,6 +9,7 @@
          COPY player-data.
          COPY rl-keys.
          COPY enemy-data.
+         COPY ball-data.
          01 rl-quit PIC 9 VALUE 0.
          01 bg-color.
            05 bg-r PIC 9(3) VALUE 0.
@@ -28,10 +29,12 @@
          PERFORM UNTIL rl-quit EQUALS 1
            PERFORM UPDATE-PLAYER-MOVEMENT
            PERFORM UPDATE-ENEMY
+           PERFORM UPDATE-BALL
            CALL "BeginDrawing"
            CALL "b_ClearBackground" USING BY VALUE 0 0 0 255
            PERFORM DRAW-PLAYER
            PERFORM DRAW-ENEMY
+           PERFORM DRAW-BALL
            >>IF DEBUG = 1
            CALL "DrawFPS" USING BY VALUE 0 0
            >>END-IF
@@ -42,4 +45,5 @@
          GOBACK.
 
        COPY player.
+       COPY ball.
        COPY enemy.

@@ -79,6 +79,10 @@ int b_IsKeyPressed(int key)
 {
     return IsKeyPressed(key) ? RL_TRUE : RL_FALSE;
 }
+bool b_CheckCollisionCircleRec(int centerX, int centerY, float radius, unsigned int rect)
+{
+    return CheckCollisionCircleRec((Vector2){centerX, centerY}, radius, rectangles[rect]);
+}
 void b_SetTextureSize(unsigned int texture, unsigned int width, unsigned int height)
 {
     textures[texture].width = width;
@@ -118,7 +122,10 @@ void b_DrawRectangleRec(unsigned int rec, int r, int g, int b, int a)
 {
     DrawRectangleRec(rectangles[rec], (Color){r, g, b, a});
 }
-
+void b_DrawCircle(int x, int y, float radius, int r, int g, int b, int a)
+{
+    DrawCircle(x, y, radius, (Color){r, g, b, a});
+}
 void b_DrawPixel(int x, int y, int r, int g, int b, int a)
 {
     DrawPixel(x, y, (Color){r, g, b, a});

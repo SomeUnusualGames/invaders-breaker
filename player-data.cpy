@@ -1,5 +1,6 @@
        01 player-data.
          78 PLAYER-MOVEMENT VALUE 5.
+         78 PLAYER-WIDTH VALUE 75.
          05 moving-key-1 PIC 9.
          05 moving-key-2 PIC 9.
          05 player-rect PIC 9.
