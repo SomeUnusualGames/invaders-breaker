@@ -2,7 +2,10 @@
          78 MAX-ENEMY VALUE 125.
          78 LINE-MAX VALUE 25.
          78 MAX-MOV-TIMER VALUE 90.
-         78 ENEMY-SEPARATION VALUE 30.
+         78 ENEMY-SEPARATION-X VALUE 25.
+         78 ENEMY-SEPARATION-Y VALUE 15.
+         78 ENEMY-HEIGHT VALUE 15.
+         78 ENEMY-WIDTH VALUE 26.
          05 enemy-i PIC 9(3).
          05 enemy-first-x PIC 9(3) VALUE 20.
          05 enemy-first-y PIC 9(3) VALUE 50.

@@ -1,7 +1,7 @@
       * Compile and run in Windows:
       * cobc -xj main.cbl raylib.c -O3 -lraylib -lgdi32 -lwinmm
       * -fstatic-call -> statically link the program at compile time
-       >>DEFINE DEBUG AS 0
+       >>DEFINE DEBUG AS 1
        IDENTIFICATION DIVISION.
        PROGRAM-ID. INVADERS-BREAKER-COMMAND.
        DATA DIVISION.

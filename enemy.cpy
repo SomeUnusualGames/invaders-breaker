@@ -1,17 +1,15 @@
-      * TODO: Make the enemies move slowly instead of "jumping"
-      * TODO: Collision detection with the ball
        INIT-ENEMY.
          MOVE enemy-first-x TO enemy-x
          MOVE enemy-first-y TO enemy-y
          PERFORM VARYING enemy-i FROM 1 BY 1 UNTIL enemy-i > MAX-ENEMY
            CALL "b_CreateRectangle" USING
-             BY VALUE enemy-x enemy-y 26 15
+             BY VALUE enemy-x enemy-y ENEMY-WIDTH ENEMY-HEIGHT
              RETURNING enemy-rect-list(enemy-i)
            END-CALL
-           ADD 30 TO enemy-x
+           ADD ENEMY-SEPARATION-X TO enemy-x
            IF FUNCTION MOD(enemy-i, LINE-MAX) EQUALS 0 THEN
              MOVE enemy-first-x TO enemy-x
-             ADD 30 TO enemy-y
+             ADD ENEMY-SEPARATION-Y TO enemy-y
            END-IF
          END-PERFORM.
        
@@ -25,8 +23,8 @@
                RETURNING enemy-check-x
              END-CALL
              IF enemy-check-x GREATER THAN 890 THEN
-               ADD 30 TO enemy-first-y
-               *>SUBTRACT 30 FROM enemy-first-x
+               ADD ENEMY-SEPARATION-X TO enemy-first-y
+               *>SUBTRACT ENEMY-SEPARATION-X FROM enemy-first-x
                COMPUTE current-mov = 0 - current-mov
              ELSE
                ADD current-mov TO enemy-first-x
@@ -37,7 +35,7 @@
                RETURNING enemy-check-x
              END-CALL
              IF enemy-check-x LESS OR EQUAL TO 20 THEN
-               ADD 30 TO enemy-first-y
+               ADD ENEMY-SEPARATION-X TO enemy-first-y
                COMPUTE current-mov = 0 - current-mov
              ELSE
                ADD current-mov TO enemy-first-x
@@ -46,13 +44,15 @@
            MOVE enemy-first-x TO enemy-x
            MOVE enemy-first-y TO enemy-y
            PERFORM VARYING enemy-i FROM 1 BY 1 UNTIL enemy-i > MAX-ENEMY
-             CALL "b_RectangleSetXY" USING
-               BY VALUE enemy-rect-list(enemy-i) enemy-x enemy-y
-             END-CALL
-             ADD ENEMY-SEPARATION TO enemy-x
+             IF enemy-rect-list(enemy-i) GREATER THAN 0 THEN
+               CALL "b_RectangleSetXY" USING
+                 BY VALUE enemy-rect-list(enemy-i) enemy-x enemy-y
+               END-CALL
+             END-IF
+             ADD ENEMY-SEPARATION-X TO enemy-x
              IF FUNCTION MOD(enemy-i, LINE-MAX) EQUALS 0 THEN
                MOVE enemy-first-x TO enemy-x
-               ADD ENEMY-SEPARATION TO enemy-y
+               ADD ENEMY-SEPARATION-Y TO enemy-y
              END-IF
            END-PERFORM
          END-IF.
@@ -61,17 +61,31 @@
          MOVE enemy-first-x TO enemy-x
          MOVE enemy-first-y TO enemy-y
          PERFORM VARYING enemy-i FROM 1 BY 1 UNTIL enemy-i > MAX-ENEMY
-           >>IF DEBUG = 1
-           CALL "b_DrawRectangleRec" USING
-             BY VALUE enemy-rect-list(enemy-i) 255 0 0 255
-           >>END-IF
-           CALL "DRAW-ENEMY-BODY" USING
-             BY REFERENCE enemy-x enemy-y
-           END-CALL
-           ADD 30 TO enemy-x
+           IF enemy-rect-list(enemy-i) GREATER THAN 0 THEN
+             >>IF DEBUG = 1
+             EVALUATE enemy-i
+               WHEN leftmost-enemy
+                 CALL "b_DrawRectangleRec" USING
+                   BY VALUE enemy-rect-list(enemy-i) 0 255 0 255
+                 END-CALL
+               WHEN rightmost-enemy
+                 CALL "b_DrawRectangleRec" USING
+                   BY VALUE enemy-rect-list(enemy-i) 0 0 255 255
+                 END-CALL
+               WHEN OTHER
+                 CALL "b_DrawRectangleRec" USING
+                   BY VALUE enemy-rect-list(enemy-i) 255 0 0 255
+                 END-CALL
+             END-EVALUATE
+             >>END-IF
+             CALL "DRAW-ENEMY-BODY" USING
+               BY REFERENCE enemy-x enemy-y
+             END-CALL
+           END-IF
+           ADD ENEMY-SEPARATION-X TO enemy-x
            IF FUNCTION MOD(enemy-i, LINE-MAX) EQUALS 0 THEN
              MOVE enemy-first-x TO enemy-x
-             ADD 30 TO enemy-y
+             ADD ENEMY-SEPARATION-Y TO enemy-y
            END-IF
          END-PERFORM.
 

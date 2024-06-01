@@ -177,6 +177,10 @@ int b_RectangleGetX(unsigned int rectangle)
 {
     return rectangles[rectangle].x;
 }
+int b_RectangleGetY(unsigned int rectangle)
+{
+    return rectangles[rectangle].y;
+}
 void b_RectangleSetXY(unsigned int rectangle, int x, int y)
 {
     rectangles[rectangle].x = x;
