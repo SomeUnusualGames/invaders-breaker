@@ -34,7 +34,7 @@
                BY VALUE enemy-rect-list(leftmost-enemy)
                RETURNING enemy-check-x
              END-CALL
-             IF enemy-check-x LESS OR EQUAL TO 20 THEN
+             IF enemy-check-x LESS OR EQUAL TO 25 THEN
                ADD ENEMY-SEPARATION-X TO enemy-first-y
                COMPUTE current-mov = 0 - current-mov
              ELSE
@@ -56,6 +56,34 @@
              END-IF
            END-PERFORM
          END-IF.
+
+       SET-NEW-LEFTMOST.
+         PERFORM VARYING enemy-i FROM 1 BY 1 UNTIL enemy-i > LINE-MAX
+           *>ADD LINE-MAX TO enemy-i GIVING enemy-j
+           MOVE enemy-i TO enemy-j
+           ADD enemy-i TO MAX-ENEMY GIVING enemy-limit-search
+           PERFORM VARYING rect-i FROM enemy-j BY LINE-MAX
+           UNTIL rect-i >= enemy-limit-search
+             IF enemy-rect-list(rect-i) GREATER THAN 0 THEN
+               MOVE rect-i TO leftmost-enemy
+               NEXT SENTENCE
+             END-IF
+           END-PERFORM
+         END-PERFORM.
+
+       SET-NEW-RIGHTMOST.
+         PERFORM VARYING enemy-i FROM LINE-MAX BY -1 UNTIL enemy-i < 1
+           *>ADD LINE-MAX TO enemy-i GIVING enemy-j
+           MOVE enemy-i TO enemy-j
+           ADD enemy-i TO MAX-ENEMY GIVING enemy-limit-search
+           PERFORM VARYING rect-i FROM enemy-j BY LINE-MAX
+           UNTIL rect-i >= enemy-limit-search
+             IF enemy-rect-list(rect-i) GREATER THAN 0 THEN
+               MOVE rect-i TO rightmost-enemy
+               NEXT SENTENCE
+             END-IF
+           END-PERFORM
+         END-PERFORM.
 
        DRAW-ENEMY.
          MOVE enemy-first-x TO enemy-x

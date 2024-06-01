@@ -83,6 +83,12 @@
                  RETURNING brick-y
                END-CALL
                MOVE -1 TO enemy-rect-list(enemy-i)
+               *> TODO: Check when there's no more enemies left
+               IF enemy-i EQUALS leftmost-enemy THEN
+                 PERFORM SET-NEW-LEFTMOST
+               ELSE IF enemy-i EQUALS rightmost-enemy THEN
+                 PERFORM SET-NEW-RIGHTMOST
+               END-IF
                ADD brick-y TO ENEMY-HEIGHT GIVING brick-bottom
                IF new-ball-y GREATER OR EQUAL TO brick-bottom THEN
                  COMPUTE ball-speed-y = 
