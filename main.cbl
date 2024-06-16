@@ -1,9 +1,9 @@
       * Compile and run in Windows:
       * cobc -xj main.cbl raylib.c -O3 -lraylib -lgdi32 -lwinmm
       * -fstatic-call -> statically link the program at compile time
-       >>DEFINE DEBUG AS 1
+       >>DEFINE DEBUG AS 0
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. INVADERS-BREAKER-COMMAND.
+       PROGRAM-ID. INVADERS-BREAKER.
        DATA DIVISION.
        WORKING-STORAGE SECTION.
          COPY player-data.
@@ -11,6 +11,7 @@
          COPY enemy-data.
          COPY ball-data.
          COPY background-data.
+         COPY missile-data.
          01 rl-quit PIC 9 VALUE 0.
          01 bg-color.
            05 bg-r PIC 9(3) VALUE 0.
@@ -20,7 +21,7 @@
        MAIN-PROCEDURE.
          CALL "InitWindow" USING
            BY VALUE 960 640
-           BY REFERENCE "Invaders Breaker Command"
+           BY REFERENCE "Invaders Breaker"
            ON EXCEPTION
              DISPLAY "Error: raylib not found" UPON SYSERR
          END-CALL
@@ -32,6 +33,7 @@
            PERFORM UPDATE-PLAYER-MOVEMENT
            PERFORM UPDATE-ENEMY
            PERFORM UPDATE-BALL
+           PERFORM UPDATE-MISSILE
            CALL "BeginDrawing"
            CALL "b_ClearBackground" USING BY VALUE 0 0 0 255
            PERFORM DRAW-BACKGROUND
@@ -48,6 +50,7 @@
            PERFORM DRAW-PLAYER
            PERFORM DRAW-ENEMY
            PERFORM DRAW-BALL
+           PERFORM DRAW-MISSILES
            >>IF DEBUG = 1
            CALL "DrawFPS" USING BY VALUE 0 0
            >>END-IF
@@ -60,4 +63,5 @@
        COPY background.
        COPY player.
        COPY ball.
+       COPY missile.
        COPY enemy.
