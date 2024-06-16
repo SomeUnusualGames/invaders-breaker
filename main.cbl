@@ -10,6 +10,7 @@
          COPY rl-keys.
          COPY enemy-data.
          COPY ball-data.
+         COPY background-data.
          01 rl-quit PIC 9 VALUE 0.
          01 bg-color.
            05 bg-r PIC 9(3) VALUE 0.
@@ -24,6 +25,7 @@
              DISPLAY "Error: raylib not found" UPON SYSERR
          END-CALL
          CALL "SetTargetFPS" USING BY VALUE 60.
+         PERFORM INIT-BACKGROUND
          PERFORM INIT-PLAYER
          PERFORM INIT-ENEMY
          PERFORM UNTIL rl-quit EQUALS 1
@@ -32,6 +34,17 @@
            PERFORM UPDATE-BALL
            CALL "BeginDrawing"
            CALL "b_ClearBackground" USING BY VALUE 0 0 0 255
+           PERFORM DRAW-BACKGROUND
+           IF state-idle EQUALS 1 THEN
+             CALL "b_DrawText" USING
+               BY REFERENCE "Invaders Must Die!"
+               BY VALUE 250 200 50 255 149 9 255
+             END-CALL
+             CALL "b_DrawText" USING
+               BY REFERENCE "Press Space to start"
+               BY VALUE 380 300 20 255 255 255 255
+             END-CALL
+           END-IF
            PERFORM DRAW-PLAYER
            PERFORM DRAW-ENEMY
            PERFORM DRAW-BALL
@@ -44,6 +57,7 @@
          CALL "CloseWindow"
          GOBACK.
 
+       COPY background.
        COPY player.
        COPY ball.
        COPY enemy.

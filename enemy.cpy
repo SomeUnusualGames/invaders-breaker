@@ -14,7 +14,9 @@
          END-PERFORM.
        
        UPDATE-ENEMY.
-         SUBTRACT 1 FROM enemy-mov-timer
+         IF state-idle EQUALS 0 THEN
+           SUBTRACT 1 FROM enemy-mov-timer
+         END-IF
          IF enemy-mov-timer EQUALS 0 THEN
            MOVE MAX-MOV-TIMER TO enemy-mov-timer
            IF current-mov GREATER THAN 0 THEN
@@ -66,6 +68,7 @@
            UNTIL rect-i >= enemy-limit-search
              IF enemy-rect-list(rect-i) GREATER THAN 0 THEN
                MOVE rect-i TO leftmost-enemy
+               *> TODO: is this the proper way to exit a loop?
                NEXT SENTENCE
              END-IF
            END-PERFORM
@@ -91,20 +94,28 @@
          PERFORM VARYING enemy-i FROM 1 BY 1 UNTIL enemy-i > MAX-ENEMY
            IF enemy-rect-list(enemy-i) GREATER THAN 0 THEN
              >>IF DEBUG = 1
-             EVALUATE enemy-i
-               WHEN leftmost-enemy
+             IF leftmost-enemy EQUALS rightmost-enemy THEN
+               IF enemy-i EQUALS leftmost-enemy THEN
                  CALL "b_DrawRectangleRec" USING
-                   BY VALUE enemy-rect-list(enemy-i) 0 255 0 255
+                   BY VALUE enemy-rect-list(enemy-i) 255 255 0 255
                  END-CALL
-               WHEN rightmost-enemy
-                 CALL "b_DrawRectangleRec" USING
-                   BY VALUE enemy-rect-list(enemy-i) 0 0 255 255
-                 END-CALL
-               WHEN OTHER
-                 CALL "b_DrawRectangleRec" USING
-                   BY VALUE enemy-rect-list(enemy-i) 255 0 0 255
-                 END-CALL
-             END-EVALUATE
+               END-IF
+             ELSE
+               EVALUATE enemy-i
+                 WHEN leftmost-enemy
+                   CALL "b_DrawRectangleRec" USING
+                     BY VALUE enemy-rect-list(enemy-i) 0 255 0 255
+                   END-CALL
+                 WHEN rightmost-enemy
+                   CALL "b_DrawRectangleRec" USING
+                     BY VALUE enemy-rect-list(enemy-i) 0 0 255 255
+                   END-CALL
+                 WHEN OTHER
+                   CALL "b_DrawRectangleRec" USING
+                     BY VALUE enemy-rect-list(enemy-i) 255 0 0 255
+                   END-CALL
+               END-EVALUATE
+             END-IF
              >>END-IF
              CALL "DRAW-ENEMY-BODY" USING
                BY REFERENCE enemy-x enemy-y

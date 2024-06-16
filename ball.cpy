@@ -53,11 +53,12 @@
            *> (distance-paddle / PLAYER-WIDTH) - 0.5 -> [-0.5, 0.5]
            COMPUTE ball-offset = (distance-paddle / PLAYER-WIDTH) - 0.5
            COMPUTE ball-speed-y = 0 - ball-speed-y
-           IF ball-offset IS LESS THAN -0.25 THEN
+           *> TODO: is this value ok?  vvvv
+           IF ball-offset IS LESS THAN -0.15 THEN
              COMPUTE ball-speed-x = 
                -(FUNCTION ABS(ball-speed-x)) + ball-offset
              END-COMPUTE
-           ELSE IF ball-offset IS GREATER THAN 0.25 THEN
+           ELSE IF ball-offset IS GREATER THAN 0.15 THEN
              COMPUTE ball-speed-x =
                FUNCTION ABS(ball-speed-x) + ball-offset
              END-COMPUTE
