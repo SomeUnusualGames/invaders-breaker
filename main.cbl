@@ -1,6 +1,11 @@
       * Compile and run in Windows:
       * cobc -xj main.cbl raylib.c -O3 -lraylib -lgdi32 -lwinmm
       * -fstatic-call -> statically link the program at compile time
+      * TODO:
+      * - Ball goes out of screen -> restart scr
+      * - Enemies missiles collide with player -> restart scr
+      * - Player destroys all enemies, advance scr, add more enemies
+      *   that shoot more frequently
        >>DEFINE DEBUG AS 0
        IDENTIFICATION DIVISION.
        PROGRAM-ID. INVADERS-BREAKER.
@@ -12,11 +17,13 @@
          COPY ball-data.
          COPY background-data.
          COPY missile-data.
-         01 rl-quit PIC 9 VALUE 0.
-         01 bg-color.
-           05 bg-r PIC 9(3) VALUE 0.
-           05 bg-g PIC 9(3) VALUE 0.
-           05 bg-b PIC 9(3) VALUE 0.
+         01 game-data.
+           05 restart-screen PIC 9 VALUE 0.
+           05 rl-quit PIC 9 VALUE 0.
+           05 bg-color.
+             10 bg-r PIC 9(3) VALUE 0.
+             10 bg-g PIC 9(3) VALUE 0.
+             10 bg-b PIC 9(3) VALUE 0.
        PROCEDURE DIVISION.
        MAIN-PROCEDURE.
          CALL "InitWindow" USING

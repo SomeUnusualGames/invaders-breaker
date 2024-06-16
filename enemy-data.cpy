@@ -5,6 +5,7 @@
          78 ENEMY-HEIGHT VALUE 15.
          05 enemy-rect-list PIC S9(3) OCCURS MAX-ENEMY TIMES
             INDEXED BY rect-i.
+         05 enemy-count PIC S9(3) VALUE MAX-ENEMY.
          05 loop-data.
            10 enemy-i PIC 9(3).
            10 enemy-j PIC 9(3).

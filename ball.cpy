@@ -29,7 +29,8 @@
              0 - FUNCTION SIGN(ball-speed-x) * MAX-SPEED
            END-COMPUTE
            COMPUTE new-ball-x = ball-x + ball-speed-x
-         ELSE IF new-ball-x GREATER THAN 960 THEN
+         END-IF
+         IF new-ball-x GREATER THAN 960 THEN
            COMPUTE ball-speed-x =
              0 - FUNCTION SIGN(ball-speed-x) * MAX-SPEED
            END-COMPUTE
@@ -58,7 +59,8 @@
              COMPUTE ball-speed-x = 
                -(FUNCTION ABS(ball-speed-x)) + ball-offset
              END-COMPUTE
-           ELSE IF ball-offset IS GREATER THAN 0.15 THEN
+           END-IF
+           IF ball-offset IS GREATER THAN 0.15 THEN
              COMPUTE ball-speed-x =
                FUNCTION ABS(ball-speed-x) + ball-offset
              END-COMPUTE
@@ -83,35 +85,66 @@
                  enemy-rect-list(enemy-i)
                  RETURNING brick-y
                END-CALL
+               SUBTRACT 1 FROM enemy-count
                MOVE -1 TO enemy-rect-list(enemy-i)
                *> TODO: Check when there's no more enemies left
                IF enemy-i EQUALS leftmost-enemy THEN
                  PERFORM SET-NEW-LEFTMOST
-               ELSE IF enemy-i EQUALS rightmost-enemy THEN
+               END-IF
+               IF enemy-i EQUALS rightmost-enemy THEN
                  PERFORM SET-NEW-RIGHTMOST
-               END-IF
+               END-IF               
+               *> WRONG!
+               *>IF enemy-i EQUALS leftmost-enemy THEN
+               *>  PERFORM SET-NEW-LEFTMOST
+               *>ELSE IF enemy-i EQUALS rightmost-enemy THEN
+               *>  PERFORM SET-NEW-RIGHTMOST
+               *>END-IF
                ADD brick-y TO ENEMY-HEIGHT GIVING brick-bottom
-               IF new-ball-y GREATER OR EQUAL TO brick-bottom THEN
-                 COMPUTE ball-speed-y = 
-                   0 - FUNCTION SIGN(ball-speed-y) * MAX-SPEED
-                 END-COMPUTE
-                 COMPUTE new-ball-y = ball-y + ball-speed-y
-               ELSE IF new-ball-y LESS OR EQUAL TO brick-y THEN
-                 COMPUTE ball-speed-y =
-                   0 - FUNCTION SIGN(ball-speed-y) * MAX-SPEED
-                 END-COMPUTE
-                 COMPUTE new-ball-y = ball-y + ball-speed-y
-               ELSE IF new-ball-x LESS OR EQUAL TO brick-x THEN
-                 COMPUTE ball-speed-x = 
-                   0 - FUNCTION SIGN(ball-speed-x) * MAX-SPEED
-                 END-COMPUTE
-                 COMPUTE new-ball-x = ball-x + ball-speed-x
-               ELSE IF ball-x GREATER THAN brick-x THEN
-                 COMPUTE ball-speed-x =
-                   0 - FUNCTION SIGN(ball-speed-x) * MAX-SPEED
-                 END-COMPUTE
-                 COMPUTE new-ball-x = ball-x + ball-speed-x
-               END-IF
+               EVALUATE TRUE
+                 WHEN new-ball-y GREATER OR EQUAL TO brick-bottom
+                   COMPUTE ball-speed-y = 
+                     0 - FUNCTION SIGN(ball-speed-y) * MAX-SPEED
+                   END-COMPUTE
+                   COMPUTE new-ball-y = ball-y + ball-speed-y
+                 WHEN new-ball-y LESS OR EQUAL TO brick-y
+                   COMPUTE ball-speed-y =
+                     0 - FUNCTION SIGN(ball-speed-y) * MAX-SPEED
+                   END-COMPUTE
+                   COMPUTE new-ball-y = ball-y + ball-speed-y
+                 WHEN new-ball-x LESS OR EQUAL TO brick-x
+                   COMPUTE ball-speed-x = 
+                     0 - FUNCTION SIGN(ball-speed-x) * MAX-SPEED
+                   END-COMPUTE
+                   COMPUTE new-ball-x = ball-x + ball-speed-x
+                 WHEN ball-x GREATER THAN brick-x
+                   COMPUTE ball-speed-x =
+                     0 - FUNCTION SIGN(ball-speed-x) * MAX-SPEED
+                   END-COMPUTE
+                   COMPUTE new-ball-x = ball-x + ball-speed-x
+               END-EVALUATE
+               *> This is wrong don't do this or you will be fired
+               *>IF new-ball-y GREATER OR EQUAL TO brick-bottom THEN
+               *>  COMPUTE ball-speed-y = 
+               *>    0 - FUNCTION SIGN(ball-speed-y) * MAX-SPEED
+               *>  END-COMPUTE
+               *>  COMPUTE new-ball-y = ball-y + ball-speed-y
+               *>ELSE IF new-ball-y LESS OR EQUAL TO brick-y THEN
+               *>  COMPUTE ball-speed-y =
+               *>    0 - FUNCTION SIGN(ball-speed-y) * MAX-SPEED
+               *>  END-COMPUTE
+               *>  COMPUTE new-ball-y = ball-y + ball-speed-y
+               *>ELSE IF new-ball-x LESS OR EQUAL TO brick-x THEN
+               *>  COMPUTE ball-speed-x = 
+               *>    0 - FUNCTION SIGN(ball-speed-x) * MAX-SPEED
+               *>  END-COMPUTE
+               *>  COMPUTE new-ball-x = ball-x + ball-speed-x
+               *>ELSE IF ball-x GREATER THAN brick-x THEN
+               *>  COMPUTE ball-speed-x =
+               *>    0 - FUNCTION SIGN(ball-speed-x) * MAX-SPEED
+               *>  END-COMPUTE
+               *>  COMPUTE new-ball-x = ball-x + ball-speed-x
+               *>END-IF
                NEXT SENTENCE
              END-IF
          END-PERFORM.

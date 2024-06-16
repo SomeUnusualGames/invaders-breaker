@@ -15,7 +15,10 @@
          END-PERFORM
          SUBTRACT 0.1 FROM shoot-timer
          IF shoot-timer LESS OR EQUAL TO 0 THEN
-           COMPUTE shoot-timer = 10 + (FUNCTION RANDOM() * 10)
+           COMPUTE shoot-timer =
+             7 + (FUNCTION RANDOM() * (enemy-count / 3))
+           END-COMPUTE
+           DISPLAY shoot-timer
            PERFORM VARYING enemy-i FROM 1 BY 1
            UNTIL enemy-i > MAX-ENEMY
              COMPUTE rand-m = FUNCTION RANDOM() * MAX-MISSILE
