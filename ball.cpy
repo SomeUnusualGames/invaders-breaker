@@ -92,7 +92,9 @@
                END-CALL
                SUBTRACT 1 FROM enemy-count
                MOVE -1 TO enemy-rect-list(enemy-i)
-               *> TODO: Check when there's no more enemies left
+               IF enemy-count EQUALS 0 THEN
+                 MOVE 4 TO game-state
+               END-IF
                IF enemy-i EQUALS leftmost-enemy THEN
                  PERFORM SET-NEW-LEFTMOST
                END-IF

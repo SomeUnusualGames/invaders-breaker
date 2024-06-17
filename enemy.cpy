@@ -6,6 +6,9 @@
              BY VALUE enemy-x enemy-y ENEMY-WIDTH ENEMY-HEIGHT
              RETURNING enemy-rect-list(enemy-i)
            END-CALL
+           IF enemy-i GREATER THAN current-count THEN
+             MOVE -1 TO enemy-rect-list(enemy-i)
+           END-IF
            ADD ENEMY-SEPARATION-X TO enemy-x
            IF FUNCTION MOD(enemy-i, LINE-MAX) EQUALS 0 THEN
              MOVE enemy-first-x TO enemy-x
@@ -23,6 +26,9 @@
            CALL "b_RectangleSetXY" USING BY VALUE
              enemy-i enemy-x enemy-y
            END-CALL
+           IF enemy-i GREATER THAN current-count THEN
+             MOVE -1 TO enemy-rect-list(enemy-i)
+           END-IF
            ADD ENEMY-SEPARATION-X TO enemy-x
            IF FUNCTION MOD(enemy-i, LINE-MAX) EQUALS 0 THEN
              MOVE enemy-first-x TO enemy-x
@@ -62,7 +68,8 @@
            END-IF
            MOVE enemy-first-x TO enemy-x
            MOVE enemy-first-y TO enemy-y
-           PERFORM VARYING enemy-i FROM 1 BY 1 UNTIL enemy-i > MAX-ENEMY
+           PERFORM VARYING enemy-i FROM 1 BY 1
+           UNTIL enemy-i > current-count
              IF enemy-rect-list(enemy-i) GREATER THAN 0 THEN
                CALL "b_RectangleSetXY" USING
                  BY VALUE enemy-rect-list(enemy-i) enemy-x enemy-y
@@ -74,18 +81,20 @@
                ADD ENEMY-SEPARATION-Y TO enemy-y
              END-IF
            END-PERFORM
+           IF enemy-y GREATER THAN ENEMY-Y-LIMIT THEN
+             MOVE 3 TO game-state
+           END-IF
          END-IF.
 
        SET-NEW-LEFTMOST.
          PERFORM VARYING enemy-i FROM 1 BY 1 UNTIL enemy-i > LINE-MAX
            *>ADD LINE-MAX TO enemy-i GIVING enemy-j
            MOVE enemy-i TO enemy-j
-           ADD enemy-i TO MAX-ENEMY GIVING enemy-limit-search
+           ADD enemy-i TO current-count GIVING enemy-limit-search
            PERFORM VARYING rect-i FROM enemy-j BY LINE-MAX
            UNTIL rect-i >= enemy-limit-search
              IF enemy-rect-list(rect-i) GREATER THAN 0 THEN
                MOVE rect-i TO leftmost-enemy
-               *> TODO: is this the proper way to exit a loop?
                NEXT SENTENCE
              END-IF
            END-PERFORM
@@ -95,7 +104,7 @@
          PERFORM VARYING enemy-i FROM LINE-MAX BY -1 UNTIL enemy-i < 1
            *>ADD LINE-MAX TO enemy-i GIVING enemy-j
            MOVE enemy-i TO enemy-j
-           ADD enemy-i TO MAX-ENEMY GIVING enemy-limit-search
+           ADD enemy-i TO current-count GIVING enemy-limit-search
            PERFORM VARYING rect-i FROM enemy-j BY LINE-MAX
            UNTIL rect-i >= enemy-limit-search
              IF enemy-rect-list(rect-i) GREATER THAN 0 THEN
@@ -108,7 +117,8 @@
        DRAW-ENEMY.
          MOVE enemy-first-x TO enemy-x
          MOVE enemy-first-y TO enemy-y
-         PERFORM VARYING enemy-i FROM 1 BY 1 UNTIL enemy-i > MAX-ENEMY
+         PERFORM VARYING enemy-i FROM 1 BY 1
+         UNTIL enemy-i > current-count
            IF enemy-rect-list(enemy-i) GREATER THAN 0 THEN
              >>IF DEBUG = 1
              IF leftmost-enemy EQUALS rightmost-enemy THEN

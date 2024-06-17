@@ -1,11 +1,14 @@
        01 enemy-data.
-         78 MAX-ENEMY VALUE 75.
+         78 MAX-ENEMY VALUE 200.
+         78 START-ENEMY-COUNT VALUE 75.
          78 LINE-MAX VALUE 25.
          78 ENEMY-WIDTH VALUE 26.
          78 ENEMY-HEIGHT VALUE 15.
+         78 ENEMY-Y-LIMIT VALUE 570.
          05 enemy-rect-list PIC S9(3) OCCURS MAX-ENEMY TIMES
             INDEXED BY rect-i.
-         05 enemy-count PIC S9(3) VALUE MAX-ENEMY.
+         05 current-count PIC 9(3) VALUE START-ENEMY-COUNT.
+         05 enemy-count PIC S9(3) VALUE START-ENEMY-COUNT.
          05 loop-data.
            10 enemy-i PIC 9(3).
            10 enemy-j PIC 9(3).

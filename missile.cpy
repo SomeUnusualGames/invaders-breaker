@@ -26,7 +26,7 @@
          SUBTRACT 0.1 FROM shoot-timer
          IF shoot-timer LESS OR EQUAL TO 0 THEN
            COMPUTE shoot-timer =
-             7 + (FUNCTION RANDOM() * (enemy-count / 3))
+             7 + (FUNCTION RANDOM() * (enemy-count / 2))
            END-COMPUTE
            PERFORM VARYING enemy-i FROM 1 BY 1
            UNTIL enemy-i > MAX-ENEMY

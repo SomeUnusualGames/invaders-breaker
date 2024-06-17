@@ -4,7 +4,7 @@
 
 #define MAX_TEXTURES 99
 #define MAX_SOUNDS 99
-#define MAX_RECTANGLES 99
+#define MAX_RECTANGLES 300
 #define MAX_VECTOR2 99
 
 #define RL_TRUE 1

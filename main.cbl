@@ -23,12 +23,9 @@
              88 game-playing VALUE 2.
              88 game-restart VALUE 3.
              88 game-complete VALUE 4.
-           05 bg-color.
-             10 bg-r PIC 9(3) VALUE 0.
-             10 bg-g PIC 9(3) VALUE 0.
-             10 bg-b PIC 9(3) VALUE 0.
        PROCEDURE DIVISION.
        MAIN-PROCEDURE.
+         *>CALL "SetConfigFlags" USING BY VALUE 64
          CALL "InitWindow" USING
            BY VALUE 960 640
            BY REFERENCE "Invaders Breaker"
@@ -51,6 +48,7 @@
            EVALUATE TRUE
              WHEN game-idle PERFORM IDLE-SCREEN
              WHEN game-restart PERFORM RESTART-SCREEN
+             WHEN game-complete PERFORM COMPLETE-SCREEN
            END-EVALUATE
            PERFORM DRAW-PLAYER
            PERFORM DRAW-ENEMY
@@ -81,24 +79,44 @@
            RETURNING restart-game
          END-CALL
          IF restart-game EQUALS 1 THEN
-           PERFORM RESET-ENEMY-VALUES
-           PERFORM RESTART-MISSILE
-           MOVE INITIAL-BALL-X TO ball-x
-           MOVE INITIAL-BALL-Y TO ball-y
-           MOVE INITIAL-PLAYER-X TO player-x
-           MOVE ENEMY-SEPARATION-X TO current-mov
-           CALL "b_RectangleSetX" USING BY VALUE player-rect player-x
-           MOVE 1 TO leftmost-enemy
-           MOVE LINE-MAX TO rightmost-enemy
-           MOVE 255 TO player-a
-           MOVE 1 TO game-state
-           MOVE 0 TO restart-game
-           MOVE 3 TO ball-speed-x
-           MOVE -3 TO ball-speed-y
+           MOVE START-ENEMY-COUNT TO current-count
+           PERFORM SET-INITIAL-VALUES
          END-IF
          CALL "b_DrawText" USING
            BY REFERENCE "You lose! Press R to restart"
            BY VALUE 300 200 30 255 0 0 255
+         END-CALL.
+
+       SET-INITIAL-VALUES.
+         PERFORM RESET-ENEMY-VALUES
+         PERFORM RESTART-MISSILE
+         MOVE INITIAL-BALL-X TO ball-x
+         MOVE INITIAL-BALL-Y TO ball-y
+         MOVE INITIAL-PLAYER-X TO player-x
+         MOVE ENEMY-SEPARATION-X TO current-mov
+         CALL "b_RectangleSetX" USING BY VALUE player-rect player-x
+         MOVE 1 TO leftmost-enemy
+         MOVE LINE-MAX TO rightmost-enemy
+         MOVE 255 TO player-a
+         MOVE 1 TO game-state
+         MOVE 0 TO restart-game
+         MOVE 3 TO ball-speed-x
+         MOVE -3 TO ball-speed-y.
+
+       COMPLETE-SCREEN.
+         CALL "b_IsKeyPressed" USING
+           BY VALUE rl-key-r
+           RETURNING restart-game
+         END-CALL
+         IF restart-game EQUALS 1 THEN
+           IF current-count LESS THAN MAX-ENEMY THEN
+             ADD LINE-MAX TO current-count
+           END-IF
+           PERFORM SET-INITIAL-VALUES
+         END-IF
+         CALL "b_DrawText" USING
+           BY REFERENCE "You won! Press R to continue"
+           BY VALUE 300 200 30 0 255 0 255
          END-CALL.
 
        COPY background.
@@ -106,3 +124,4 @@
        COPY ball.
        COPY missile.
        COPY enemy.
+       END PROGRAM INVADERS-BREAKER.
