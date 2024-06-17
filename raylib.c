@@ -198,3 +198,7 @@ int b_CheckCollisionRecs(unsigned int rec1, unsigned int rec2)
 {
     return CheckCollisionRecs(rectangles[rec1], rectangles[rec2]) ? RL_TRUE : RL_FALSE;
 }
+int b_CheckCollisionRecs2(unsigned int rec1, int x, int y, int width, int height)
+{
+    return CheckCollisionRecs(rectangles[rec1], (Rectangle){x, y, width, height}) ? RL_TRUE : RL_FALSE;
+}

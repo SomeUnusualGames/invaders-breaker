@@ -1,10 +1,11 @@
        01 ball-data.
          78 MAX-SPEED VALUE 3.
-         05 state-idle PIC 9 VALUE 1.
+         78 INITIAL-BALL-X VALUE 360.
+         78 INITIAL-BALL-Y VALUE 545.
          05 ball-collide PIC 9 VALUE 0.
          05 distance-paddle PIC S9(3).
-         05 ball-x PIC S9(3) VALUE 360.
-         05 ball-y PIC S9(3) VALUE 545.
+         05 ball-x PIC S9(3) VALUE INITIAL-BALL-X.
+         05 ball-y PIC S9(3) VALUE INITIAL-BALL-Y.
          05 new-ball-x PIC S9(3).
          05 new-ball-y PIC S9(3).
          05 ball-speed-x USAGE COMP-1 VALUE 3.

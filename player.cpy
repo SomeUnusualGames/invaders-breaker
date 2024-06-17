@@ -5,6 +5,9 @@
          END-CALL.
        
        UPDATE-PLAYER-MOVEMENT.
+         IF game-restart THEN
+           NEXT SENTENCE
+         END-IF
          CALL "b_IsKeyDown" USING
            BY VALUE rl-key-a
            RETURNING moving-key-1
@@ -34,18 +37,21 @@
          END-IF.
 
        DRAW-PLAYER.
+         IF game-restart AND player-a GREATER THAN 0 THEN
+           SUBTRACT 5 FROM player-a
+         END-IF
          CALL "b_DrawRectangleRec" USING
-           BY VALUE player-rect 255 255 255 255
+           BY VALUE player-rect 255 255 255 player-a
          END-CALL
          >>IF DEBUG = 1
          CALL "b_DrawRectangle" USING
-           BY VALUE player-x 550 75 10 120 0 120 255
+           BY VALUE player-x 550 75 10 120 0 120 player-a
          END-CALL
          CALL "b_DrawRectangle" USING
-           BY VALUE player-x 550 42 10 255 0 0 255
+           BY VALUE player-x 550 42 10 255 0 0 player-a
          END-CALL
          CALL "b_DrawRectangle" USING
-           BY VALUE player-x 550 34 10 10 10 180 255
+           BY VALUE player-x 550 34 10 10 10 180 player-a
          END-CALL
          >>END-IF
          .

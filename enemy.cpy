@@ -13,8 +13,25 @@
            END-IF
          END-PERFORM.
        
+       RESET-ENEMY-VALUES.
+         MOVE ENEMY-SEPARATION-X TO enemy-first-x
+         MOVE 50 TO enemy-first-y
+         MOVE enemy-first-x TO enemy-x
+         MOVE enemy-first-y TO enemy-y
+         PERFORM VARYING enemy-i FROM 1 BY 1 UNTIL enemy-i > MAX-ENEMY
+           MOVE enemy-i TO enemy-rect-list(enemy-i)
+           CALL "b_RectangleSetXY" USING BY VALUE
+             enemy-i enemy-x enemy-y
+           END-CALL
+           ADD ENEMY-SEPARATION-X TO enemy-x
+           IF FUNCTION MOD(enemy-i, LINE-MAX) EQUALS 0 THEN
+             MOVE enemy-first-x TO enemy-x
+             ADD ENEMY-SEPARATION-Y TO enemy-y
+           END-IF
+         END-PERFORM.
+
        UPDATE-ENEMY.
-         IF state-idle EQUALS 0 THEN
+         IF game-playing THEN
            SUBTRACT 1 FROM enemy-mov-timer
          END-IF
          IF enemy-mov-timer EQUALS 0 THEN

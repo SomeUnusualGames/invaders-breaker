@@ -2,11 +2,9 @@
       * cobc -xj main.cbl raylib.c -O3 -lraylib -lgdi32 -lwinmm
       * -fstatic-call -> statically link the program at compile time
       * TODO:
-      * - Ball goes out of screen -> restart scr
-      * - Enemies missiles collide with player -> restart scr
       * - Player destroys all enemies, advance scr, add more enemies
       *   that shoot more frequently
-       >>DEFINE DEBUG AS 0
+       >>DEFINE DEBUG AS 1
        IDENTIFICATION DIVISION.
        PROGRAM-ID. INVADERS-BREAKER.
        DATA DIVISION.
@@ -18,8 +16,13 @@
          COPY background-data.
          COPY missile-data.
          01 game-data.
-           05 restart-screen PIC 9 VALUE 0.
+           05 restart-game PIC 9.
            05 rl-quit PIC 9 VALUE 0.
+           05 game-state PIC 9 VALUE 1.
+             88 game-idle VALUE 1.
+             88 game-playing VALUE 2.
+             88 game-restart VALUE 3.
+             88 game-complete VALUE 4.
            05 bg-color.
              10 bg-r PIC 9(3) VALUE 0.
              10 bg-g PIC 9(3) VALUE 0.
@@ -42,18 +45,13 @@
            PERFORM UPDATE-BALL
            PERFORM UPDATE-MISSILE
            CALL "BeginDrawing"
-           CALL "b_ClearBackground" USING BY VALUE 0 0 0 255
+           *>CALL "b_ClearBackground" USING BY VALUE 0 0 0 255
+           CALL "ClearBackground" USING BY VALUE 0
            PERFORM DRAW-BACKGROUND
-           IF state-idle EQUALS 1 THEN
-             CALL "b_DrawText" USING
-               BY REFERENCE "Invaders Must Die!"
-               BY VALUE 250 200 50 255 149 9 255
-             END-CALL
-             CALL "b_DrawText" USING
-               BY REFERENCE "Press Space to start"
-               BY VALUE 380 300 20 255 255 255 255
-             END-CALL
-           END-IF
+           EVALUATE TRUE
+             WHEN game-idle PERFORM IDLE-SCREEN
+             WHEN game-restart PERFORM RESTART-SCREEN
+           END-EVALUATE
            PERFORM DRAW-PLAYER
            PERFORM DRAW-ENEMY
            PERFORM DRAW-BALL
@@ -66,6 +64,42 @@
          END-PERFORM
          CALL "CloseWindow"
          GOBACK.
+
+       IDLE-SCREEN.
+         CALL "b_DrawText" USING
+           BY REFERENCE "Invaders Must Die!"
+           BY VALUE 250 200 50 255 149 9 255
+         END-CALL
+         CALL "b_DrawText" USING
+           BY REFERENCE "Press Space to start"
+           BY VALUE 380 300 20 255 255 255 255
+         END-CALL.
+
+       RESTART-SCREEN.
+         CALL "b_IsKeyPressed" USING
+           BY VALUE rl-key-r
+           RETURNING restart-game
+         END-CALL
+         IF restart-game EQUALS 1 THEN
+           PERFORM RESET-ENEMY-VALUES
+           PERFORM RESTART-MISSILE
+           MOVE INITIAL-BALL-X TO ball-x
+           MOVE INITIAL-BALL-Y TO ball-y
+           MOVE INITIAL-PLAYER-X TO player-x
+           MOVE ENEMY-SEPARATION-X TO current-mov
+           CALL "b_RectangleSetX" USING BY VALUE player-rect player-x
+           MOVE 1 TO leftmost-enemy
+           MOVE LINE-MAX TO rightmost-enemy
+           MOVE 255 TO player-a
+           MOVE 1 TO game-state
+           MOVE 0 TO restart-game
+           MOVE 3 TO ball-speed-x
+           MOVE -3 TO ball-speed-y
+         END-IF
+         CALL "b_DrawText" USING
+           BY REFERENCE "You lose! Press R to restart"
+           BY VALUE 300 200 30 255 0 0 255
+         END-CALL.
 
        COPY background.
        COPY player.

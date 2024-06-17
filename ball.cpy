@@ -1,8 +1,10 @@
        UPDATE-BALL.
-         IF state-idle EQUALS 1 THEN
+         IF game-idle THEN
            PERFORM UPDATE-IDLE-BALL
          ELSE
-           PERFORM UPDATE-BALL-MOVEMENT
+           IF game-playing THEN
+             PERFORM UPDATE-BALL-MOVEMENT
+           END-IF
          END-IF.
        
        UPDATE-IDLE-BALL.
@@ -13,7 +15,7 @@
            RETURNING player-shoot-ball
          END-CALL
          IF player-shoot-ball EQUALS 1 THEN
-           MOVE 0 TO state-idle
+           MOVE 2 TO game-state
          END-IF.
 
        UPDATE-BALL-MOVEMENT.
@@ -21,7 +23,10 @@
          COMPUTE new-ball-y = ball-y + ball-speed-y
          PERFORM CHECK-BOUNDARIES THROUGH CHECK-ENEMIES
          MOVE new-ball-x TO ball-x
-         MOVE new-ball-y TO ball-y.
+         MOVE new-ball-y TO ball-y
+         IF ball-y GREATER THAN 650 THEN
+           MOVE 3 TO game-state
+         END-IF.
 
        CHECK-BOUNDARIES.
          IF new-ball-x LESS THAN 0 THEN

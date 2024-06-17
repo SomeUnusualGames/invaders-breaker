@@ -6,3 +6,4 @@
          05 m-y PIC S9(4) OCCURS MAX-MISSILE TIMES.
          05 rand-m USAGE COMP-1.
          05 shoot-timer USAGE COMP-1 VALUE 5.0.
+         05 hit-player PIC 9 VALUE 0.
