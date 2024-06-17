@@ -11,4 +11,3 @@
              1 1 255 255 255 255
            END-CALL
          END-PERFORM.
-       

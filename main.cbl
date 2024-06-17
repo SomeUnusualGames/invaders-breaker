@@ -1,10 +1,6 @@
       * Compile and run in Windows:
       * cobc -xj main.cbl raylib.c -O3 -lraylib -lgdi32 -lwinmm
-      * -fstatic-call -> statically link the program at compile time
-      * TODO:
-      * - Player destroys all enemies, advance scr, add more enemies
-      *   that shoot more frequently
-       >>DEFINE DEBUG AS 1
+       >>DEFINE DEBUG AS 0
        IDENTIFICATION DIVISION.
        PROGRAM-ID. INVADERS-BREAKER.
        DATA DIVISION.
