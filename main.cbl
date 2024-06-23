@@ -1,4 +1,4 @@
-      * Compile and run in Windows:
+      * Compile and run on Windows:
       * cobc -xj main.cbl raylib.c -O3 -lraylib -lgdi32 -lwinmm
        >>DEFINE DEBUG AS 0
        IDENTIFICATION DIVISION.
@@ -28,7 +28,7 @@
            ON EXCEPTION
              DISPLAY "Error: raylib not found" UPON SYSERR
          END-CALL
-         CALL "SetTargetFPS" USING BY VALUE 60.
+         CALL "SetTargetFPS" USING BY VALUE 60
          PERFORM INIT-BACKGROUND
          PERFORM INIT-PLAYER
          PERFORM INIT-ENEMY
@@ -90,6 +90,7 @@
          MOVE INITIAL-BALL-Y TO ball-y
          MOVE INITIAL-PLAYER-X TO player-x
          MOVE ENEMY-SEPARATION-X TO current-mov
+         MOVE START-ENEMY-COUNT TO enemy-count
          CALL "b_RectangleSetX" USING BY VALUE player-rect player-x
          MOVE 1 TO leftmost-enemy
          MOVE LINE-MAX TO rightmost-enemy
